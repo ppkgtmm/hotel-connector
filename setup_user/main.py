@@ -9,7 +9,7 @@ def setup_replication_user():
     with open("setup_user/queries.sql") as fp:
         queries = (
             fp.read()
-            .replace("${DBZ_ROLE}", getenv("DBZ_ROLE"))
+            .replace("${DBZ_USER}", getenv("DBZ_USER"))
             .replace("${DBZ_PASSWORD}", getenv("DBZ_PASSWORD"))
             .replace("${DB_NAME}", getenv("DB_NAME"))
         )
