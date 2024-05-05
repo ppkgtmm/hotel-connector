@@ -1,13 +1,11 @@
 CREATE USER ${DBZ_USER} PASSWORD '${DBZ_PASSWORD}';
 
-CREATE ROLE ${DBZ_ROLE} LOGIN;
+GRANT LOGIN TO ${DBZ_USER};
 
-GRANT rds_replication TO ${DBZ_ROLE};
+GRANT rds_replication TO ${DBZ_USER};
 
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO ${DBZ_ROLE};
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO ${DBZ_USER};
 
-GRANT CREATE ON DATABASE ${DB_NAME} TO ${DBZ_ROLE};
+GRANT CREATE ON DATABASE ${DB_NAME} TO ${DBZ_USER};
 
-GRANT ${DBZ_ROLE} TO rds_superuser;
-
-REASSIGN OWNED BY rds_superuser TO ${DBZ_ROLE}
+SELECT 'ALTER TABLE "' || table_name || '" OWNER TO ${DBZ_USER};' from information_schema.tables where table_schema = 'public' \gexec
