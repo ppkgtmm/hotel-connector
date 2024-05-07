@@ -4,8 +4,7 @@ import json
 
 
 def get_configuration():
-    config_path = f"register_source/config.json"
-    with open(config_path, "r") as fp:
+    with open("connector-config.json", "r") as fp:
         config = fp.read()
     config = (
         config.replace("${DB_HOST}", getenv("DB_HOST").split(":")[0])
