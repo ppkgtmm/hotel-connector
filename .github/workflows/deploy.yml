@@ -1,0 +1,28 @@
+name: deploy function to gcs
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-job:
+    permissions:
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: create archive
+        run: zip -r hotel-connector.zip .
+      - name: google auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.gcp_project_id }}
+          workload_identity_provider: projects/${{ secrets.project_number }}/locations/global/workloadIdentityPools/github/providers/hotel-connector
+      - name: setup gcloud sdk
+        uses: google-github-actions/setup-gcloud@v2
+      - name: deploy archive
+        run: gcloud storage cp hotel-connector.zip gs://${{ secrets.project_number }}-cloud-functions/hotel-connector.zip
