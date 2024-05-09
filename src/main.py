@@ -1,10 +1,10 @@
-from os import getenv
+from os import getenv, path
 import requests
 import json
 
 
 def get_configuration():
-    with open("connector-config.json", "r") as fp:
+    with open(path.join(path.abspath(path.dirname(__file__)), "connector-config.json"), "r") as fp:
         config = fp.read()
     config = (
         config.replace("${DB_HOST}", getenv("DB_HOST").split(":")[0])
