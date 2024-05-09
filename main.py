@@ -20,4 +20,4 @@ def register_source_database(request):
     endpoint = f"{getenv("KAFKA_CONNECT_SERVER")}/connectors/"
     headers = {"Accept": "application/json", "Content-Type": "application/json"}
     response = requests.post(endpoint, headers=headers, json=json.loads(config))
-    return 'success' if response.status_code == 201 else 'failed'
+    return "success" if response.status_code == 201 else "failed"
