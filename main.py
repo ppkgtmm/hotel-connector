@@ -15,7 +15,7 @@ def get_configuration():
     return config
 
 
-def register_source_database(request):
+def register_source_database(event, context):
     config = get_configuration()
     endpoint = f"{getenv("KAFKA_CONNECT_SERVER")}/connectors/"
     headers = {"Accept": "application/json", "Content-Type": "application/json"}
