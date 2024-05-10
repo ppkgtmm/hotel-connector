@@ -34,7 +34,7 @@ def get_query_template():
     return template
 
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     engine = create_engine(f'postgresql://{getenv("DB_USER")}:{getenv("DB_PASSWORD")}@{getenv("DB_HOST")}/{getenv("DB_NAME")}')
     conn = engine.connect()
     template = get_query_template()
