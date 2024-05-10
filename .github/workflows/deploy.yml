@@ -21,7 +21,7 @@ jobs:
       - name: create archive
         run: |
           cp requirements.txt lambda
-          zip -r hotel-connector.zip lambda
+          zip -r hotel-connector.zip lambda/
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
