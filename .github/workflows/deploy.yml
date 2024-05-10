@@ -28,7 +28,7 @@ jobs:
           mkdir package
           pip install --target ./package -r requirements.txt
           cd package
-          zip -r hotel-connector.zip .
+          zip -ur hotel-connector.zip .
           cd ../
           cd lambda
           zip -r hotel-connector.zip .
