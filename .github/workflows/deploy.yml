@@ -10,6 +10,9 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    env:
+      BUCKET_NAME : ${{ secrets.account_id }}-hotel-bucket
+      AWS_REGION : ap-south-1
 
     runs-on: ubuntu-latest
     steps:
@@ -17,14 +20,12 @@ jobs:
         uses: actions/checkout@v4
       - name: create archive
         run: |
-        cp requirements.txt lambda
-        zip -r hotel-connector.zip lambda
-      - name: google auth
-        uses: google-github-actions/auth@v2
+          cp requirements.txt lambda
+          zip -r hotel-connector.zip lambda
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
         with:
-          project_id: ${{ secrets.gcp_project_id }}
-          workload_identity_provider: projects/${{ secrets.project_number }}/locations/global/workloadIdentityPools/github/providers/hotel-connector
-      - name: setup gcloud sdk
-        uses: google-github-actions/setup-gcloud@v2
-      - name: deploy archive
-        run: gcloud storage cp hotel-connector.zip gs://${{ secrets.project_number }}-cloud-functions/hotel-connector.zip
+          role-to-assume: arn:aws:iam::${{ secrets.account_id }}:role/github-action-s3
+          aws-region: ${{ env.AWS_REGION }}
+      - name: deploy function archive to s3
+        run: aws s3 cp hotel-connector.zip s3://${{ env.BUCKET_NAME }}/
