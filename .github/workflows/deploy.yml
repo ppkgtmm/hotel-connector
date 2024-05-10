@@ -24,14 +24,13 @@ jobs:
           python-version: 3.12
       - name: create archive
         run: |
-          cp requirements.txt lambda
           python -m pip install --upgrade pip
-          cd lambda/
           mkdir package
           pip install --target ./package -r requirements.txt
           cd package
           zip -r hotel-connector.zip .
           cd ../
+          cd lambda
           zip -r hotel-connector.zip .
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
