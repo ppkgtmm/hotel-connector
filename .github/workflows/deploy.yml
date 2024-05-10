@@ -31,7 +31,7 @@ jobs:
           zip -r hotel-connector.zip .
           cd ../
           cd lambda
-          zip -ur hotel-connector.zip .
+          zip -gr hotel-connector.zip .
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
