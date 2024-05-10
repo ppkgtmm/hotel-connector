@@ -38,4 +38,4 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.account_id }}:role/github-action-s3
           aws-region: ${{ env.AWS_REGION }}
       - name: deploy function archive to s3
-        run: aws s3 cp lambda/hotel-connector.zip s3://${{ env.BUCKET_NAME }}/
+        run: aws s3 cp hotel-connector.zip s3://${{ env.BUCKET_NAME }}/
