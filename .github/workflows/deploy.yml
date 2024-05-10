@@ -18,10 +18,17 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: setup python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
       - name: create archive
         run: |
           cp requirements.txt lambda
+          python -m pip install --upgrade pip
           cd lambda/
+          mkdir package
+          pip install --target ./package -r requirements.txt
           zip -r hotel-connector.zip .
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
