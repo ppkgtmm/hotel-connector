@@ -8,7 +8,7 @@ mypy-extensions==1.0.0
 packaging==24.0
 pathspec==0.12.1
 platformdirs==4.2.1
-psycopg2==2.9.9
+psycopg2-binary==2.9.9
 requests==2.31.0
 SQLAlchemy==2.0.30
 typing_extensions==4.11.0
