@@ -1,4 +1,4 @@
-name: deploy function to gcs
+name: deploy function to s3
 on:
   push:
     branches:
@@ -16,7 +16,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: create archive
-        run: zip -r hotel-connector.zip .
+        run: |
+        cp requirements.txt lambda
+        zip -r hotel-connector.zip lambda
       - name: google auth
         uses: google-github-actions/auth@v2
         with:
