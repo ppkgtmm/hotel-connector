@@ -29,6 +29,9 @@ jobs:
           cd lambda/
           mkdir package
           pip install --target ./package -r requirements.txt
+          cd package
+          zip -r hotel-connector.zip .
+          cd ../
           zip -r hotel-connector.zip .
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
