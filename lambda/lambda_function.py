@@ -43,7 +43,7 @@ def lambda_handler(event, context):
     list_table_query = "SELECT table_name from information_schema.tables where table_schema = 'public'"
     result = conn.execute(text(list_table_query))
     for item in result.fetchall():
-        ownership_query = 'ALTER TABLE "' + item['table_name'] + f'" OWNER TO {getenv("DBZ_USER")}'
+        ownership_query = 'ALTER TABLE "' + item[0] + f'" OWNER TO {getenv("DBZ_USER")}'
         conn.execute(text(ownership_query))
     conn.close()
     engine.dispose()
