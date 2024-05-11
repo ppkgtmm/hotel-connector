@@ -11,16 +11,15 @@
     "snapshot.mode": "when_needed",
     "tasks.max": "1",
     "database.server.id": "1",
-    "schema.history.internal.kafka.topic": "${DB_NAME}",
-    "schema.history.internal.kafka.bootstrap.servers": "${KAFKA_BOOTSTRAP_SERVER}",
-    "schema.history.internal.consumer.security.protocol": "SASL_SSL",
-    "schema.history.internal.consumer.sasl.mechanism": "AWS_MSK_IAM",
-    "schema.history.internal.consumer.sasl.jaas.config": "software.amazon.msk.auth.iam.IAMLoginModule required;",
-    "schema.history.internal.consumer.sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler",
-    "schema.history.internal.producer.security.protocol": "SASL_SSL",
-    "schema.history.internal.producer.sasl.mechanism": "AWS_MSK_IAM",
-    "schema.history.internal.producer.sasl.jaas.config": "software.amazon.msk.auth.iam.IAMLoginModule required;",
-    "schema.history.internal.producer.sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler",
-    "include.schema.changes": "true"
+    "database.history.internal.kafka.topic": "${DB_NAME}",
+    "database.history.internal.kafka.bootstrap.servers": "${KAFKA_BOOTSTRAP_SERVER}",
+    "database.history.internal.consumer.security.protocol": "SASL_SSL",
+    "database.history.internal.consumer.sasl.mechanism": "AWS_MSK_IAM",
+    "database.history.internal.consumer.sasl.jaas.config": "software.amazon.msk.auth.iam.IAMLoginModule required;",
+    "database.history.internal.consumer.sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler",
+    "database.history.internal.producer.security.protocol": "SASL_SSL",
+    "database.history.internal.producer.sasl.mechanism": "AWS_MSK_IAM",
+    "database.history.internal.producer.sasl.jaas.config": "software.amazon.msk.auth.iam.IAMLoginModule required;",
+    "database.history.internal.producer.sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
   }
 }
