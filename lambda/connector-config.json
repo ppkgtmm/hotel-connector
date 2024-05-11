@@ -8,8 +8,6 @@
     "database.password": "${DBZ_PASSWORD}",
     "database.dbname": "${DB_NAME}",
     "topic.prefix": "${DB_NAME}",
-    "schema.include.list": "public",
-    "snapshot.mode": "when_needed",
 		"tasks.max": "1",
 		"database.port": "5432",
 		"database.server.id": "1",
