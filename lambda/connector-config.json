@@ -8,9 +8,7 @@
     "database.password": "${DBZ_PASSWORD}",
     "database.dbname": "${DB_NAME}",
     "topic.prefix": "${DB_NAME}",
-    "snapshot.mode": "when_needed",
-    "tasks.max": "1",
-    "database.server.name": "${DB_NAME}",
-    "table.include.list": "public.(.*)"
+    "schema.include.list": "public",
+    "snapshot.mode": "when_needed"
   }
 }
