@@ -12,6 +12,7 @@ def get_configuration():
         .replace("${DBZ_USER}", getenv("DBZ_USER"))
         .replace("${DBZ_PASSWORD}", getenv("DBZ_PASSWORD"))
         .replace("${DB_NAME}", getenv("DB_NAME"))
+        .replace("${KAFKA_BOOTSTRAP_SERVER}", getenv("KAFKA_BOOTSTRAP_SERVER"))
     )
     return config
 
