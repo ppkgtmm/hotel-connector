@@ -9,6 +9,7 @@ def get_configuration():
         config = fp.read()
     config = (
         config.replace("${DB_HOST}", getenv("DB_HOST").split(":")[0])
+        .replace("${DB_PORT}", getenv("DB_HOST").split(":")[-1])
         .replace("${DBZ_USER}", getenv("DBZ_USER"))
         .replace("${DBZ_PASSWORD}", getenv("DBZ_PASSWORD"))
         .replace("${DB_NAME}", getenv("DB_NAME"))
