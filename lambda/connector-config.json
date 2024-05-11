@@ -4,6 +4,7 @@
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "plugin.name": "pgoutput",
     "database.hostname": "${DB_HOST}",
+    "database.port": "${DB_PORT}",
     "database.user": "${DBZ_USER}",
     "database.password": "${DBZ_PASSWORD}",
     "database.dbname": "${DB_NAME}",
