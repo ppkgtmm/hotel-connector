@@ -1,0 +1,36 @@
+name: deploy cdc plugin to s3
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-job:
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      BUCKET_NAME : ${{ secrets.account_id }}-hotel-bucket
+      AWS_REGION : ap-south-1
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: create archive
+        run: |
+          mkdir debezium-connector-postgresql
+          wget https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/2.6.1.Final/debezium-connector-postgres-2.6.1.Final-plugin.tar.gz
+          tar -xzf debezium-connector-postgres-2.6.1.Final-plugin.tar.gz -C debezium-connector-postgresql
+          wget -O jcustenborder-kafka-config-provider-aws-0.1.2.zip https://github.com/jcustenborder/kafka-config-provider-aws/archive/refs/tags/0.1.2.zip
+          unzip jcustenborder-kafka-config-provider-aws-0.1.2.zip -d debezium-connector-postgresql
+          cd debezium-connector-postgresql/jcustenborder-kafka-config-provider-aws-0.1.2/lib
+          wget https://repo1.maven.org/maven2/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar
+          cd ../../
+          zip -9 -r ../debezium-connector-postgresql-v2.6.1.zip *
+          cd ..
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.account_id }}:role/github-action-s3
+          aws-region: ${{ env.AWS_REGION }}
+      - name: deploy plugin archive to s3
+        run: aws s3 cp debezium-connector-postgresql-v2.6.1.zip s3://${{ env.BUCKET_NAME }}/plugin/
