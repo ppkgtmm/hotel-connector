@@ -9,6 +9,8 @@
     "database.dbname": "${DB_NAME}",
     "topic.prefix": "${DB_NAME}",
     "snapshot.mode": "when_needed",
-    "tasks.max": "1"
+    "tasks.max": "1",
+    "database.server.name": "${DB_NAME}",
+    "table.include.list": "public.(.*)"
   }
 }
