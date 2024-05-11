@@ -8,6 +8,7 @@
     "database.user": "${DBZ_USER}",
     "database.password": "${DBZ_PASSWORD}",
     "database.dbname": "${DB_NAME}",
-    "topic.prefix": "${DB_NAME}"
+    "database.server.name": "${DB_NAME}",
+    "tasks.max": "1"
   }
 }
