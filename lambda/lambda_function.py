@@ -25,3 +25,4 @@ def lambda_handler(event, context):
         conn.execute(text(ownership_query))
     conn.close()
     engine.dispose()
+    return "success"
