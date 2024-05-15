@@ -13,7 +13,7 @@ def get_query_template():
     return template
 
 
-def prepare_for_replication():
+def handler(event, context):
     username, password = getenv("DB_USER"), getenv("DB_PASSWORD")
     host, database = getenv("DB_HOST"), getenv("DB_NAME")
     engine = create_engine(f"postgresql://{username}:{password}@{host}/{database}")
@@ -24,22 +24,4 @@ def prepare_for_replication():
         conn.execute(text(ownership_query))
     conn.close()
     engine.dispose()
-
-
-def prepare_data_warehouse():
-    username, password = getenv("DWH_USER"), getenv("DWH_PASSWORD")
-    host, database = getenv("DWH_HOST"), getenv("DWH_NAME")
-    engine = create_engine(
-        f"redshift+redshift_connector://{username}:{password}@{host}/{database}"
-    )
-    conn = engine.connect()
-    with open("warehouse.sql", "r") as fp:
-        conn.execute(fp.read())
-    conn.close()
-    engine.dispose()
-
-
-def handler(event, context):
-    prepare_for_replication()
-    prepare_data_warehouse()
     return "success"
