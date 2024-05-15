@@ -19,6 +19,7 @@ def handler(event, context):
     engine = create_engine(f"postgresql://{username}:{password}@{host}/{database}")
     conn = engine.connect()
     result = conn.execute(text(get_query_template()))
+    conn.commit()
     for item in result.fetchall():
         ownership_query = 'ALTER TABLE "' + item[0] + f'" OWNER TO {getenv("DBZ_USER")}'
         conn.execute(text(ownership_query))
