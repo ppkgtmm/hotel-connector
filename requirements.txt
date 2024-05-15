@@ -1,4 +1,6 @@
 greenlet==3.0.3
+packaging==24.0
 psycopg2-binary==2.9.9
-SQLAlchemy==2.0.30
+SQLAlchemy==1.4.52
+sqlalchemy-redshift==0.8.14
 typing_extensions==4.11.0
