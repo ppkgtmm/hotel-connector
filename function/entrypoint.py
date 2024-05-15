@@ -25,4 +25,7 @@ def prepare_for_replication():
         conn.execute(text(ownership_query))
     conn.close()
     engine.dispose()
+
+def handler(event, context):
+    prepare_for_replication()
     return "success"
