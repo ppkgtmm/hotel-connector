@@ -13,7 +13,7 @@ def get_query_template():
     return template
 
 
-def handler(event, context):
+def prepare_for_replication():
     username, password = getenv("DB_USER"), getenv("DB_PASSWORD")
     host, database = getenv("DB_HOST"), getenv("DB_NAME")
     engine = create_engine(f"postgresql://{username}:{password}@{host}/{database}")
