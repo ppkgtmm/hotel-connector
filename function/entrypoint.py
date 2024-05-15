@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, text
 
 
 def get_query_template():
-    with open("queries.sql", "r") as fp:
+    with open("replication.sql", "r") as fp:
         template = fp.read()
     template = (
         template.replace("${DBZ_USER}", getenv("DBZ_USER"))
