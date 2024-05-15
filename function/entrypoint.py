@@ -37,4 +37,5 @@ def prepare_data_warehouse():
 
 def handler(event, context):
     prepare_for_replication()
+    prepare_data_warehouse()
     return "success"
