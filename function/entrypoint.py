@@ -18,10 +18,10 @@ def prepare_for_replication():
     host, database = getenv("DB_HOST"), getenv("DB_NAME")
     engine = create_engine(f"postgresql://{username}:{password}@{host}/{database}")
     conn = engine.connect()
-    result = conn.execute(get_query_template())
+    result = conn.execute(text(get_query_template()))
     for item in result.fetchall():
         ownership_query = 'ALTER TABLE "' + item[0] + f'" OWNER TO {getenv("DBZ_USER")}'
-        conn.execute(ownership_query)
+        conn.execute(text(ownership_query))
     conn.close()
     engine.dispose()
 
