@@ -25,15 +25,19 @@ def prepare_for_replication():
     conn.close()
     engine.dispose()
 
+
 def prepare_data_warehouse():
     username, password = getenv("DWH_USER"), getenv("DWH_PASSWORD")
     host, database = getenv("DWH_HOST"), getenv("DWH_NAME")
-    engine = create_engine(f"redshift+psycopg2://{username}:{password}@{host}/{database}")
+    engine = create_engine(
+        f"redshift+psycopg2://{username}:{password}@{host}/{database}"
+    )
     conn = engine.connect()
     with open("warehouse.sql", "r") as fp:
         conn.execute(fp.read())
     conn.close()
     engine.dispose()
+
 
 def handler(event, context):
     prepare_for_replication()
