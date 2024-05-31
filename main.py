@@ -23,10 +23,10 @@ def prepare_source_database():
     )
     engine = create_engine("postgresql+pg8000://", creator=get_db_connection)
     with engine.connect() as conn:
-        table_names = conn.execute(text(template)).fetchall()
+        table_names = conn.execute(text(template))
         conn.commit()
     engine.dispose()
-    return table_names
+    return table_names.fetchall()
 
 
 def prepare_for_replication(request):
