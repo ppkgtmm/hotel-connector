@@ -1,7 +1,7 @@
 from os import getenv
 from sqlalchemy import create_engine, text
 from google.cloud.sql.connector import Connector, IPTypes
-from google.cloud.pubsub import PublisherClient
+from google.pubsub_v1 import PublisherClient, SubscriberClient
 
 
 def get_db_connection():
@@ -30,10 +30,13 @@ def prepare_source_database():
 
 
 def prepare_for_replication(request):
-    client = PublisherClient()
+    pub_client = PublisherClient()
+    sub_client = SubscriberClient()
     for item in prepare_source_database():
-        topic_path = client.topic_path(
+        topic_path = pub_client.topic_path(
             getenv("GCP_PROJECT_ID"), getenv("DB_NAME") + ".public." + item[0]
         )
-        client.create_topic(request={"name": topic_path})
+        pub_client.create_topic(name=topic_path)
+        sub_client.create_subscription(name=item[0], topic=topic_path)
+
     return "success"
