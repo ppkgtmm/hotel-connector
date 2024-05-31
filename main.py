@@ -37,6 +37,7 @@ def prepare_for_replication(request):
             getenv("GCP_PROJECT_ID"), getenv("DB_NAME") + ".public." + item[0]
         )
         pub_client.create_topic(name=topic_path)
-        sub_client.create_subscription(name=item[0], topic=topic_path)
+        subs_path = sub_client.subscription_path(getenv("GCP_PROJECT_ID"), item[0])
+        sub_client.create_subscription(name=subs_path, topic=topic_path)
 
     return "success"
