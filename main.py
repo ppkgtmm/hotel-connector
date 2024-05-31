@@ -15,7 +15,7 @@ def get_db_connection():
     )
 
 
-def prepare_for_replication():
+def prepare_source_database():
     with open("queries.sql", "r") as fp:
         template = fp.read()
     template = template.replace("${DB_USER}", getenv("DB_USER")).replace(
@@ -29,9 +29,9 @@ def prepare_for_replication():
     return table_names
 
 
-def handler(request):
+def prepare_for_replication(request):
     client = PublisherClient()
-    for item in prepare_for_replication():
+    for item in prepare_source_database():
         topic_path = client.topic_path(
             getenv("GCP_PROJECT_ID"), getenv("DB_NAME") + ".public." + item[0]
         )
