@@ -1,8 +1,15 @@
 from os import getenv
 from sqlalchemy import create_engine, text
 from google.cloud.sql.connector import Connector, IPTypes
-from google.pubsub_v1 import PublisherClient, SubscriberClient, BigQueryConfig
-from google.cloud.bigquery import Client, Table
+from google.cloud.pubsublite.types import (
+    CloudRegion,
+    CloudZone,
+    TopicPath,
+    SubscriptionPath,
+    BacklogLocation,
+)
+from google.cloud.pubsublite import AdminClient, Topic, Subscription
+from google.protobuf.duration_pb2 import Duration
 
 
 def get_db_connection():
@@ -30,32 +37,47 @@ def prepare_source_database():
     return table_names.fetchall()
 
 
-def prepare_bq_storage(table_names: list[str]):
-    bq_client = Client()
-    dataset_ref = getenv("GCP_PROJECT_ID") + "." + getenv("BQ_DATASET")
-    schema = [{"name": "data", "type": "string"}]
-    bq_client.create_dataset(dataset_ref, exists_ok=True)
+def get_topic_config(table_name: str, location: CloudZone):
+    topic_path = TopicPath(
+        getenv("GCP_PROJECT_ID"),
+        location,
+        getenv("DB_NAME") + ".public." + table_name,
+    )
+    return topic_path, Topic(
+        name=str(topic_path),
+        partition_config=Topic.PartitionConfig(count=1),
+        retention_config=Topic.RetentionConfig(
+            per_partition_bytes=2 * 1024 * 1024 * 1024,
+            period=Duration(seconds=60 * 60 * 24 * 7),
+        ),
+    )
+
+
+def get_subscription_config(
+    table_name: str, location: CloudZone, topic_path: TopicPath
+):
+    subscription_path = SubscriptionPath(getenv("GCP_PROJECT_ID"), location, table_name)
+    return Subscription(
+        name=str(subscription_path),
+        topic=str(topic_path),
+        delivery_config=Subscription.DeliveryConfig(
+            delivery_requirement=Subscription.DeliveryConfig.DeliveryRequirement.DELIVER_AFTER_STORED,
+        ),
+    )
+
+
+def prepare_pubsub_topics(table_names: list[str]):
+    cloud_region = CloudRegion(getenv("GCP_REGION"))
+    location = CloudZone(cloud_region, getenv("GCP_ZONE"))
+    client = AdminClient(cloud_region)
     for table_name in table_names:
-        table = Table(dataset_ref + "." + table_name, schema=schema)
-        bq_client.delete_table(table, not_found_ok=True)
-        bq_client.create_table(table)
+        topic_path, topic = get_topic_config(table_name, location)
+        client.create_topic(topic)
+        subscription = get_subscription_config(table_name, location, topic_path)
+        client.create_subscription(subscription, target=BacklogLocation.BEGINNING)
 
 
 def prepare_for_replication(request):
-    pub_client = PublisherClient()
-    sub_client = SubscriberClient()
     table_names = [str(item[0]) for item in prepare_source_database()]
-    prepare_bq_storage(table_names)
-    dataset_path = getenv("GCP_PROJECT_ID") + "." + getenv("BQ_DATASET")
-    for table_name in table_names:
-        topic_path = pub_client.topic_path(
-            getenv("GCP_PROJECT_ID"), getenv("DB_NAME") + ".public." + table_name
-        )
-        subs_path = sub_client.subscription_path(getenv("GCP_PROJECT_ID"), table_name)
-        bq_config = BigQueryConfig(table=dataset_path + "." + table_name)
-        pub_client.create_topic(name=topic_path)
-        sub_client.create_subscription(
-            name=subs_path, topic=topic_path, bigquery_config=bq_config
-        )
-
+    prepare_pubsub_topics(table_names)
     return "success"
