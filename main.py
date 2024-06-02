@@ -45,7 +45,13 @@ def get_topic_config(table_name: str, location: CloudZone):
     )
     return topic_path, Topic(
         name=str(topic_path),
-        partition_config=Topic.PartitionConfig(count=1),
+        partition_config=Topic.PartitionConfig(
+            count=1,
+            capacity=Topic.PartitionConfig.Capacity(
+                publish_mib_per_sec=4,
+                subscribe_mib_per_sec=4,
+            ),
+        ),
         retention_config=Topic.RetentionConfig(
             per_partition_bytes=30 * 1024 * 1024 * 1024,
             period=Duration(seconds=60 * 60 * 24 * 1),
